@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SE 4352 Exam Study Lab</title>
+<style>
+:root{
+  --bg:#090d17; --panel:#111827; --panel2:#172033; --text:#f6f7fb; --muted:#aab4c5;
+  --accent:#f59e0b; --accent2:#fb923c; --good:#34d399; --bad:#fb7185; --line:#263248;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:
+radial-gradient(circle at 10% -10%,#3a2608 0,transparent 33%),
+radial-gradient(circle at 110% 10%,#18233d 0,transparent 34%),var(--bg);color:var(--text)}
+a{color:inherit}.wrap{max-width:1200px;margin:auto;padding:0 22px}
+header{position:sticky;top:0;z-index:20;background:rgba(9,13,23,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+nav{height:68px;display:flex;align-items:center;gap:20px}.brand{font-weight:900;letter-spacing:-.03em;font-size:20px;margin-right:auto}
+.brand span{color:var(--accent)} nav a{font-size:14px;text-decoration:none;color:var(--muted)} nav a:hover{color:white}
+.hero{padding:74px 0 36px}.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-weight:800;font-size:12px}
+h1{font-size:clamp(42px,7vw,82px);letter-spacing:-.055em;line-height:.92;margin:12px 0 18px;max-width:900px}
+.hero p{max-width:760px;color:var(--muted);font-size:18px;line-height:1.65}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:25px}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#171006}.btn:disabled{opacity:.45;cursor:not-allowed}.btn-secondary{background:#151e30;color:#fff;border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:25px 0 60px}.stat{background:rgba(17,24,39,.75);border:1px solid var(--line);padding:18px;border-radius:16px}.stat b{display:block;font-size:28px;color:var(--accent)}.stat span{font-size:13px;color:var(--muted)}
+section{padding:54px 0}.section-head{display:flex;gap:20px;align-items:end;justify-content:space-between;margin-bottom:22px}.section-head h2{font-size:34px;letter-spacing:-.04em;margin:0}.section-head p{margin:0;color:var(--muted);max-width:520px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}.chip{background:#111827;color:var(--muted);border:1px solid var(--line);padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700}.chip.active,.chip:hover{background:#33240b;color:#ffd98a;border-color:#6e4b0a}
+.search{width:100%;max-width:480px;background:#0e1523;color:white;border:1px solid var(--line);padding:12px 14px;border-radius:12px;outline:none}.search:focus{border-color:#76500b}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:linear-gradient(180deg,rgba(23,32,51,.93),rgba(14,21,35,.94));border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 15px 45px rgba(0,0,0,.13)}.tag{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:900}.card h3{margin:8px 0 10px;font-size:22px}.card p{color:var(--muted);line-height:1.55}.card ul{padding-left:20px;color:#d9deea;line-height:1.55}.source{font-size:12px;color:#7f8aa0;margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.flash-wrap{display:grid;grid-template-columns:1fr 320px;gap:18px}.flashcard{min-height:330px;perspective:1200px;cursor:pointer}.flash-inner{position:relative;width:100%;height:330px;transition:.55s;transform-style:preserve-3d}.flashcard.flipped .flash-inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;padding:34px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#182238,#101726)}.back{transform:rotateY(180deg);background:linear-gradient(145deg,#392706,#1d170c)}.face small{color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:.12em}.face h3{font-size:30px;line-height:1.2}.face p{font-size:20px;line-height:1.5;color:#f4e6c3}.flash-controls{display:flex;flex-direction:column;gap:10px}.progress{height:8px;background:#101725;border-radius:10px;overflow:hidden}.progress i{display:block;height:100%;background:var(--accent);width:0}.kbd{font-size:12px;color:var(--muted);line-height:1.5}
+.quiz-box{max-width:none}
+.quiz-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px}
+.quiz-tab{white-space:nowrap;border:1px solid var(--line);background:#0e1523;color:var(--muted);padding:10px 14px;border-radius:11px;cursor:pointer;font-weight:800}
+.quiz-tab:hover{color:#fff;border-color:#6a4a12}
+.quiz-tab.active{background:#33240b;color:#ffd98a;border-color:#76500b}
+.quiz-layout{display:grid;grid-template-columns:285px minmax(0,1fr);gap:14px;align-items:start}
+.quiz-sidebar{background:#0d1422;border:1px solid var(--line);border-radius:16px;padding:10px;max-height:610px;overflow-y:auto;position:sticky;top:84px}
+.quiz-sidebar-title{padding:8px 9px 11px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900}
+.quiz-nav-item{width:100%;display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:start;text-align:left;border:1px solid transparent;background:transparent;color:#dce2ec;padding:10px 9px;border-radius:10px;cursor:pointer;line-height:1.28}
+.quiz-nav-item:hover{background:#151e30;border-color:var(--line)}
+.quiz-nav-item.active{background:#241c0e;border-color:#76500b;color:#fff}
+.quiz-nav-num{font-weight:900;color:var(--accent)}
+.quiz-nav-text{font-size:13px}
+.quiz-nav-state{font-size:12px;color:var(--muted);font-weight:900}
+.quiz-nav-item.mastered .quiz-nav-state{color:var(--good)}
+.quiz-content{min-width:0}
+.quiz-section-progress{font-size:12px;color:var(--muted);margin:8px 0 0}
+.quiz-q{font-size:25px;font-weight:850;line-height:1.3;margin-bottom:18px}.choices{display:grid;gap:10px}.choice{border:1px solid var(--line);background:#111a2b;color:white;text-align:left;padding:14px 16px;border-radius:12px;cursor:pointer;font-size:15px}.choice:hover{border-color:#6a4a12}.choice.correct{background:#0d2b25;border-color:#2b8a70}.choice.wrong{background:#36141d;border-color:#96384e}.explain{margin-top:16px;padding:14px 16px;border-left:3px solid var(--accent);background:#151b28;color:#d4dae6;display:none}.quiz-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);margin:14px 0}.assignment{margin-bottom:12px}.assignment button{width:100%;display:flex;justify-content:space-between;text-align:left;padding:16px;border:0;background:transparent;color:white;font-size:16px;font-weight:800;cursor:pointer}.assignment .body{display:none;padding:0 16px 16px}.assignment.open .body{display:block}.answer{background:#0f1725;border:1px solid var(--line);border-radius:12px;padding:14px;color:#dfe5ef;line-height:1.55}.exam-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.exam-card{padding:18px;border-radius:16px;border:1px solid var(--line);background:#101725}.exam-card h4{margin:0 0 7px}.exam-card p{color:var(--muted);font-size:14px;line-height:1.5}
+footer{padding:50px 0 70px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+.hidden{display:none!important}
+@media(max-width:800px){nav a{display:none}.stats{grid-template-columns:repeat(2,1fr)}.grid,.flash-wrap,.exam-grid,.quiz-layout{grid-template-columns:1fr}.quiz-sidebar{position:static;max-height:260px}.flash-controls{flex-direction:row;flex-wrap:wrap}.flash-controls .btn{flex:1}.section-head{display:block}.section-head p{margin-top:8px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav>
+<div class="brand">SE <span>4352</span> Study Lab</div>
+<a href="#guide">Guide</a><a href="#flashcards">Flashcards</a><a href="#quiz">Quiz</a><a href="#assignments">Assignments</a><a href="#plan">Study Plan</a>
+</nav></div></header>
+
+<main>
+<div class="wrap hero">
+<div class="eyebrow">Software Architecture & Design · Exam Review</div>
+<h1>Study the ideas.<br>Practice the tradeoffs.</h1>
+<p>A focused study website built from your Modules 1–5 slides, the Module 5 case-study deck, and Assignments 1–2. Use the guide for review, flashcards for recall, and the quiz/assignment prompts for exam-style practice.</p>
+<div class="hero-actions"><a class="btn btn-primary" href="#flashcards">Start flashcards →</a><a class="btn btn-secondary" href="#guide">Review all topics</a></div>
+<div class="stats">
+<div class="stat"><b>22</b><span>study topics</span></div>
+<div class="stat"><b>135</b><span>flashcards</span></div>
+<div class="stat"><b>56</b><span>quiz questions</span></div>
+<div class="stat"><b>9</b><span>assignment prompts</span></div>
+</div>
+</div>
+
+<section id="guide"><div class="wrap">
+<div class="section-head"><div><div class="eyebrow">01 · Study Guide</div><h2>Core concepts by module</h2></div><p>Filter by module or search for a term like “QAW,” “layers,” “ASR,” “change,” or “publish.”</p></div>
+<input id="topicSearch" class="search" placeholder="Search concepts…">
+<div class="filters">
+<button class="chip active" data-filter="All">All</button>
+<button class="chip" data-filter="Module 1">Module 1</button>
+<button class="chip" data-filter="Module 2">Module 2</button>
+<button class="chip" data-filter="Module 3">Module 3</button>
+<button class="chip" data-filter="Module 4">Module 4</button>
+<button class="chip" data-filter="Module 5">Module 5</button>
+<button class="chip" data-filter="Module 5 Case Studies">Case Studies</button>
+</div>
+<div class="grid"><article class="card topic" data-module="Module 1">
+      <div class="tag">Module 1</div>
+      <h3>What is Software Architecture?</h3>
+      <p>Architecture captures the system’s significant, hard-to-change decisions and its global organization. It focuses on components/elements, their relationships/interactions, constraints, interfaces, responsibilities, and quality attributes.</p>
+      <ul><li>Architecture is early: early architectural decisions are among the hardest to change and are where quality attributes first become explicit.</li><li>Formal definitions emphasize components/elements, relationships/interactions, externally visible properties, and principles/constraints.</li><li>Architecture defines structure, component interfaces, component responsibilities, and communication/control flow.</li><li>Architecture addresses non-functional requirements (NFRs), including technical constraints, business constraints, and quality attributes.</li></ul>
+      <div class="source">Source: Module 1, slides 7–11 and 37–40</div>
+    </article>
+<article class="card topic" data-module="Module 1">
+      <div class="tag">Module 1</div>
+      <h3>Building Architecture Analogy</h3>
+      <p>Buildings help explain architecture because they have identifiable major elements, composition, arrangement, needs, and an architect role—but software differs in important ways.</p>
+      <ul><li>Building architecture is visible; software architecture usually is not directly visible by inspection.</li><li>Software is not constrained by physical laws in the same way buildings are.</li><li>Software construction is less mature as an engineering discipline than building construction.</li><li>Software is dynamic and changes during execution and over its lifetime.</li></ul>
+      <div class="source">Source: Module 1, slides 3–5</div>
+    </article>
+<article class="card topic" data-module="Module 1">
+      <div class="tag">Module 1</div>
+      <h3>Development Models</h3>
+      <p>The course contrasts Waterfall, Iterative/Agile, and Spiral development in how they handle requirements, feedback, iteration, and risk.</p>
+      <ul><li>Waterfall: sequential phase progression; works best when requirements are stable, but late change can be expensive.</li><li>Iterative: assumes the system cannot be completely understood before construction; uses incremental deliveries and customer evaluation.</li><li>Agile: emphasizes adaptability, people, short iterations, frequent feedback, and changing requirements.</li><li>Spiral: combines iteration with waterfall-like structure and places especially high emphasis on risk analysis.</li></ul>
+      <div class="source">Source: Module 1, slides 24–30</div>
+    </article>
+<article class="card topic" data-module="Module 1">
+      <div class="tag">Module 1</div>
+      <h3>Architecture vs. Design</h3>
+      <p>All architecture is design, but not all design is architecture. Architecture is broad and shallow; detailed software design is narrow and deep.</p>
+      <ul><li>Architecture covers the overall system and decisions that are difficult or impossible to change after the system is built.</li><li>Architecture often concentrates on non-functional requirements and partitions functional responsibilities.</li><li>Detailed design focuses more deeply on how individual components accomplish functional requirements.</li><li>The boundary can blur, but scope and level of abstraction are the key distinction.</li></ul>
+      <div class="source">Source: Module 1, slides 31–34</div>
+    </article>
+<article class="card topic" data-module="Module 2">
+      <div class="tag">Module 2</div>
+      <h3>Core Definition: Structures, Views, Abstraction</h3>
+      <p>Software architecture is the set of structures needed to reason about a system; those structures comprise software elements, relations among them, and properties of both.</p>
+      <ul><li>A structure is a set of elements held together by a relation.</li><li>A view represents a coherent set of architectural elements and one or more structures.</li><li>Architecture deliberately suppresses internal implementation details that do not matter for system-level reasoning.</li><li>Different structures support reasoning about different quality attributes.</li></ul>
+      <div class="source">Source: Module 2, slides 5–16 and 23</div>
+    </article>
+<article class="card topic" data-module="Module 2">
+      <div class="tag">Module 2</div>
+      <h3>Programming in the Large</h3>
+      <p>Software architecture is especially useful for programming in the large: systems with many people, many components, and substantial coordination complexity.</p>
+      <ul><li>Programming in the small: simple standalone programs; coordination is limited.</li><li>Programming in the large: many developers and components; interfaces, dependencies, quality attributes, and communication become major concerns.</li><li>Architecture supplies abstractions and shared decisions that allow teams to reason about the larger system.</li></ul>
+      <div class="source">Source: Module 2, slide 27; Assignment 2, Q1</div>
+    </article>
+<article class="card topic" data-module="Module 2">
+      <div class="tag">Module 2</div>
+      <h3>Architect Role and AIC</h3>
+      <p>Architects connect technical design to stakeholder needs, organizational constraints, project management, and the technical environment.</p>
+      <ul><li>Typical responsibilities include stakeholder liaison, technology knowledge, software engineering, and risk management.</li><li>Architects work with requirements teams, stakeholders, technical design teams, and project management.</li><li>AIC diagram: stakeholders and the development organization influence requirements; the technical environment and architect’s experience also influence the architect.</li><li>The architect creates the architecture; architecture shapes the system; the resulting system/experience feeds back into future architectural decisions.</li></ul>
+      <div class="source">Source: Module 2, slides 28–34</div>
+    </article>
+<article class="card topic" data-module="Module 3">
+      <div class="tag">Module 3</div>
+      <h3>Architecturally Significant Requirements (ASRs)</h3>
+      <p>An ASR is a requirement that has a profound effect on the architecture. Not every requirement is architecturally significant.</p>
+      <ul><li>Requirements documents and user stories are obvious places to look, but they often emphasize functionality over quality attributes.</li><li>Architects must frequently work while requirements are still in flux.</li><li>Stakeholder interviews can reveal architectural drivers and prioritized quality-attribute scenarios.</li><li>ASRs often come from business goals, not just formal requirements documents.</li></ul>
+      <div class="source">Source: Module 3, slides 3–9</div>
+    </article>
+<article class="card topic" data-module="Module 3">
+      <div class="tag">Module 3</div>
+      <h3>Quality Attribute Workshop (QAW)</h3>
+      <p>A QAW is a facilitated, stakeholder-focused method for generating, prioritizing, and refining quality-attribute scenarios before the architecture is complete.</p>
+      <ul><li>1. Presentation &amp; introductions</li><li>2. Business/mission presentation</li><li>3. Architectural plan presentation</li><li>4. Identify architectural drivers</li><li>5. Brainstorm scenarios</li><li>6. Consolidate similar scenarios</li><li>7. Prioritize scenarios</li><li>8. Refine top scenarios into source–stimulus–artifact–environment–response–response measure form</li></ul>
+      <div class="source">Source: Module 3, slides 10–12</div>
+    </article>
+<article class="card topic" data-module="Module 3">
+      <div class="tag">Module 3</div>
+      <h3>Business Goals &amp; Utility Trees</h3>
+      <p>Business goals frequently lead to ASRs. Utility trees organize and prioritize quality-attribute requirements as scenarios.</p>
+      <ul><li>Business goals may lead to quality-attribute requirements, directly affect architecture without a QA requirement, or have no architectural influence.</li><li>An ASR should have profound architectural impact and high business/mission value.</li><li>A utility tree starts at &#x27;Utility&#x27;, branches into broad quality attributes, refines them, and uses scenarios as leaves.</li><li>Scenarios are prioritized by business importance and architectural difficulty/impact.</li></ul>
+      <div class="source">Source: Module 3, slides 13–20</div>
+    </article>
+<article class="card topic" data-module="Module 4">
+      <div class="tag">Module 4</div>
+      <h3>Why Architecture Matters</h3>
+      <p>The slides give 13 reasons architecture is important, centered on quality attributes, change, analysis, communication, constraints, planning, reuse, and training.</p>
+      <ul><li>Architecture can enable or inhibit driving quality attributes.</li><li>It enables early prediction of system qualities and helps manage change.</li><li>It provides a common language among stakeholders and carries fundamental hard-to-change decisions.</li><li>It constrains implementation, influences organizational structure, supports prototyping, cost/schedule reasoning, reuse, component assembly, design restriction, and training.</li></ul>
+      <div class="source">Source: Module 4, slides 3–18</div>
+    </article>
+<article class="card topic" data-module="Module 4">
+      <div class="tag">Module 4</div>
+      <h3>Change &amp; Quality Attributes</h3>
+      <p>A good architecture makes likely changes local and provides structures that support desired qualities.</p>
+      <ul><li>Local change: modify one element.</li><li>Nonlocal change: modify multiple elements while preserving the architectural approach.</li><li>Architectural change: changes fundamental element interactions and can ripple across the system.</li><li>Examples of architectural quality concerns include performance, modifiability, security, scalability, incremental delivery, and reusability.</li></ul>
+      <div class="source">Source: Module 4, slides 4–6</div>
+    </article>
+<article class="card topic" data-module="Module 4">
+      <div class="tag">Module 4</div>
+      <h3>Guiding Design Decisions &amp; ADD</h3>
+      <p>Architectural design is systematic decision-making. Attribute-Driven Design (ADD) turns architectural drivers into structures.</p>
+      <ul><li>Seven decision categories: allocation of responsibilities, coordination model, data model, resource management, mapping among elements, binding time, and choice of technology.</li><li>Coordination decisions include who communicates, allowed/prohibited coordination, and synchronous/asynchronous or guaranteed/non-guaranteed communication.</li><li>Binding time asks when a choice becomes fixed: build time, deployment time, runtime, etc.</li><li>ADD uses ASRs plus functionality, constraints, concerns, and design purpose to systematically produce architecture.</li></ul>
+      <div class="source">Source: Module 4, slides 21–31</div>
+    </article>
+<article class="card topic" data-module="Module 5">
+      <div class="tag">Module 5</div>
+      <h3>Architectural Patterns</h3>
+      <p>An architectural pattern relates a recurring context and problem to a successful abstract solution with known elements, connectors, topology, and constraints.</p>
+      <ul><li>Patterns/styles are reusable packages of design decisions.</li><li>Pattern descriptions include context, problem, solution, element types, connectors, layout, and semantic constraints.</li><li>Pattern choices have tradeoffs; the best pattern depends on quality goals and domain needs.</li></ul>
+      <div class="source">Source: Module 5, slides 3–5 and 43</div>
+    </article>
+<article class="card topic" data-module="Module 5">
+      <div class="tag">Module 5</div>
+      <h3>Layered Pattern</h3>
+      <p>Layers group modules into cohesive service sets with a unidirectional &#x27;allowed-to-use&#x27; relation.</p>
+      <ul><li>Every piece of software belongs to exactly one layer.</li><li>There are at least two layers, commonly three or more.</li><li>Allowed-to-use relations should not be circular; lower layers do not use higher layers.</li><li>Strict layering allows a layer to use only the layer directly below it. It improves replaceability/reasoning but can add complexity and performance cost.</li></ul>
+      <div class="source">Source: Module 5, slides 13–15; Assignment 2, Q2</div>
+    </article>
+<article class="card topic" data-module="Module 5">
+      <div class="tag">Module 5</div>
+      <h3>Client–Server</h3>
+      <p>Clients initiate service requests; servers provide centralized or distributed services.</p>
+      <ul><li>Components: clients and servers; connector: request/reply, RPC, network protocol.</li><li>Useful when shared resources/services need controlled access or centralized management.</li><li>Strengths: modifiability/reuse through common services; potential scalability/availability with distributed servers.</li><li>Weaknesses: server bottleneck, single point of failure, costly client/server responsibility changes.</li></ul>
+      <div class="source">Source: Module 5, slides 17–21</div>
+    </article>
+<article class="card topic" data-module="Module 5">
+      <div class="tag">Module 5</div>
+      <h3>Pipe-and-Filter</h3>
+      <p>Independent filters transform streams of data, connected by pipes.</p>
+      <ul><li>Filters are loosely coupled and can often execute in parallel.</li><li>Pipes preserve sequence and convey data without changing it.</li><li>Strengths: reuse, composability, adding transformations.</li><li>Weaknesses: awkward interaction, limited complex shared state, and performance overhead in some cases.</li></ul>
+      <div class="source">Source: Module 5, slides 23–25</div>
+    </article>
+<article class="card topic" data-module="Module 5">
+      <div class="tag">Module 5</div>
+      <h3>Peer-to-Peer</h3>
+      <p>Peers are decentralized, equal computational entities that both request and provide services.</p>
+      <ul><li>No single peer or peer group should be critical to system health.</li><li>Strengths: distribution, robustness, scalability, resource sharing.</li><li>Weaknesses: security, consistency, backup/recovery, availability, and latency can be harder to manage.</li></ul>
+      <div class="source">Source: Module 5, slides 27–30</div>
+    </article>
+<article class="card topic" data-module="Module 5">
+      <div class="tag">Module 5</div>
+      <h3>Publish–Subscribe</h3>
+      <p>Publishers announce events; subscribers register interest; infrastructure distributes matching events without producers needing to know consumers.</p>
+      <ul><li>Strength: decouples producers and consumers and supports flexible one-to-many dissemination.</li><li>Subscribers can be added without changing publishers.</li><li>Weaknesses include latency, less predictable delivery time/order, and no guaranteed delivery unless extra mechanisms are added.</li></ul>
+      <div class="source">Source: Module 5, slides 32–35</div>
+    </article>
+<article class="card topic" data-module="Module 5">
+      <div class="tag">Module 5</div>
+      <h3>Shared Data / Blackboard</h3>
+      <p>Independent components communicate through a shared persistent repository rather than directly with one another.</p>
+      <ul><li>Blackboard systems use independent knowledge sources around a central data store.</li><li>Useful for complex or heuristic problem solving and evolving solution strategies.</li><li>Shared data can simplify communication but creates coupling around the repository.</li><li>Weaknesses: performance bottleneck, single point of failure, and potentially tight data coupling.</li></ul>
+      <div class="source">Source: Module 5, slides 37–41</div>
+    </article>
+<article class="card topic" data-module="Module 5 Case Studies">
+      <div class="tag">Module 5 Case Studies</div>
+      <h3>KWIC Pattern Tradeoffs</h3>
+      <p>The KWIC case study compares the same problem under multiple architectural approaches using five criteria.</p>
+      <ul><li>Criteria: change processing algorithm, change data representation, add functions, performance, and reuse.</li><li>Shared data: good performance and functional enhancement, poor algorithm/data changes and reuse.</li><li>Abstract data type: improves data/algorithm change and reuse, but is weaker for functional enhancement.</li><li>Implicit invocation: supports algorithm/function change and extensibility but has weaker performance/control predictability.</li><li>Pipe-and-filter: strong for algorithm/function change and reuse, but weaker for interactive behavior and performance.</li></ul>
+      <div class="source">Source: Module 5 Extra, slides 6–15</div>
+    </article>
+<article class="card topic" data-module="Module 5 Case Studies">
+      <div class="tag">Module 5 Case Studies</div>
+      <h3>Mobile Robotics Tradeoffs</h3>
+      <p>The mobile robotics case study shows that no single pattern wins everywhere; architecture is chosen based on the required qualities.</p>
+      <ul><li>Control loop: simple and suitable for small reactive robots but limited for complex task decomposition.</li><li>Layered: organizes abstraction and responsibilities, but real-time communication may not match clean layer boundaries.</li><li>Implicit-invocation task control: strong for complex coordination, fault tolerance, safety, and incremental replacement.</li><li>Blackboard: supports coordination and uncertainty resolution through a shared repository.</li></ul>
+      <div class="source">Source: Module 5 Extra, slides 26–44</div>
+    </article></div>
+</div></section>
+
+<section id="flashcards"><div class="wrap">
+<div class="section-head"><div><div class="eyebrow">02 · Active Recall</div><h2>Flashcards</h2></div><p>Click the card or press Space to flip it. Use the arrow keys to move quickly.</p></div>
+<div class="flash-wrap">
+<div id="flashcard" class="flashcard" onclick="this.classList.toggle('flipped')"><div class="flash-inner">
+<div class="face front"><small>Question</small><h3 id="flashFront"></h3><p style="color:var(--muted);font-size:14px">Click to reveal answer</p></div>
+<div class="face back"><small>Answer</small><p id="flashBack"></p></div>
+</div></div>
+<div class="flash-controls">
+<div class="card"><b id="flashCount"></b><div class="progress" style="margin-top:12px"><i id="flashProgress"></i></div></div>
+<button class="btn btn-secondary" onclick="nextCard(-1)">← Previous</button>
+<button class="btn btn-primary" onclick="nextCard(1)">Next →</button>
+<button class="btn btn-secondary" onclick="shuffleCards()">Shuffle</button>
+<div class="kbd">Keyboard: <b>Space</b> flips · <b>←/→</b> navigates</div>
+</div>
+</div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<div class="section-head"><div><div class="eyebrow">03 · Self Test</div><h2>Practice quiz</h2></div><p>Choose a section with the tabs, then pick any question from the sidebar. Keep trying until you get each question correct; mastered questions are marked with a ✓.</p></div>
+
+<div id="quizTabs" class="quiz-tabs"></div>
+
+<div class="quiz-layout">
+  <aside class="quiz-sidebar">
+    <div id="quizSidebarTitle" class="quiz-sidebar-title"></div>
+    <div id="quizSidebar"></div>
+  </aside>
+
+  <div class="card quiz-box quiz-content">
+    <div class="quiz-meta"><span id="quizNum"></span><span id="quizStatus"></span></div>
+    <div id="quizQ" class="quiz-q"></div>
+    <div id="choices" class="choices"></div>
+    <div id="explain" class="explain"></div>
+    <div class="progress" style="margin-top:18px"><i id="quizProgress"></i></div>
+    <div id="quizSectionProgress" class="quiz-section-progress"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <button id="prevQuiz" class="btn btn-secondary" onclick="moveQuiz(-1)">← Previous question</button>
+      <button id="nextQuiz" class="btn btn-primary" onclick="moveQuiz(1)">Next question →</button>
+      <button class="btn btn-secondary" onclick="resetCurrentQuiz()">Reset this question</button>
+    </div>
+  </div>
+</div>
+</div></section>
+
+<section id="assignments"><div class="wrap">
+<div class="section-head"><div><div class="eyebrow">04 · Exam-Style Practice</div><h2>Assignment questions revisited</h2></div><p>These prompts mirror the course's written-response style. Answer from memory first, then expand the model answer.</p></div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 1 — Q1: What are at least three limitations of using building architecture as an analogy for software architecture?</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> Use three or more of these: building architecture is visually inspectable while software architecture is not; software is not restricted by the same physical limitations; the software construction discipline is less mature; software is dynamic and changes during execution/evolution. Explain why each difference affects architectural reasoning.</div><div class="source">Source: Assignment 1 Q1 + Module 1 slides 3–5</div></div>
+    </div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 1 — Q3: Compare waterfall, agile, and spiral. Which is best for a large safety-critical system with evolving requirements?</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> Compare requirements stability, iteration, risk, customer feedback, and change. The slides support Spiral as a strong candidate because it is iterative and explicitly emphasizes risk analysis; justify why pure waterfall is too rigid for evolving requirements and why agile may need additional rigor/risk controls for safety-critical work.</div><div class="source">Source: Assignment 1 Q3 + Module 1 slides 24–30</div></div>
+    </div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 1 — Q4: Why is architecture broad and shallow while design is narrow and deep?</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> Architecture spans the overall system at a higher abstraction level and captures hard-to-change, cross-cutting decisions. Detailed design focuses on individual components and specifies deeper implementation details.</div><div class="source">Source: Assignment 1 Q4 + Module 1 slides 31–34</div></div>
+    </div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 1 — Q5: How does architecture serve as a basis for analysis and decision-making?</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> Architectural structures support reasoning about qualities such as modifiability, performance, availability, and security. Architecture makes fundamental choices visible early, enabling tradeoff analysis, planning, constraints on implementation, cost/schedule reasoning, and stakeholder negotiation.</div><div class="source">Source: Assignment 1 Q5 + Modules 2 and 4</div></div>
+    </div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 2 — Q1: Is architecture more useful for programming in the large or programming in the small?</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> Programming in the large. Architecture helps coordinate many components and people by defining structures, interfaces, dependencies, responsibilities, communication, and quality-related decisions.</div><div class="source">Source: Assignment 2 Q1 + Module 2 slide 27</div></div>
+    </div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 2 — Q2: How does layered architecture use abstraction and encapsulation? What is strict layering and why use it?</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> Each layer encapsulates a cohesive set of services behind interfaces and abstracts lower-level details from higher levels. Strict layering permits a layer to use only the one directly below it. This can improve understandability, isolation, replaceability, and change control, though it may add overhead.</div><div class="source">Source: Assignment 2 Q2 + Module 5 slides 13–15</div></div>
+    </div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 2 — Q3: Define stakeholders and explain how an architect handles conflicting priorities.</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> Stakeholders are people/groups with an interest in the system or its qualities—for example users, customers, developers, operators, managers, owners, or regulators. The architect elicits concerns, makes tradeoffs explicit, prioritizes business/mission value and ASRs, and seeks an architecture balancing competing qualities rather than maximizing one in isolation.</div><div class="source">Source: Assignment 2 Q3 + Modules 2–4</div></div>
+    </div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 2 — Q4: What is a QAW, and how does it discover and prioritize quality requirements?</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> A QAW is a facilitated stakeholder workshop. It presents business/mission and architectural context, identifies drivers, brainstorms and consolidates scenarios, prioritizes them by stakeholder voting, then refines the top scenarios into a six-part measurable form.</div><div class="source">Source: Assignment 2 Q4 + Module 3 slides 10–12</div></div>
+    </div>
+<div class="card assignment">
+      <button onclick="this.parentElement.classList.toggle('open')">
+        <span>Assignment 2 — Q6: Place a familiar system into the AIC and identify forward and reverse influences.</span><span>＋</span>
+      </button>
+      <div class="body"><div class="answer"><b>Study answer:</b> Forward: stakeholders/development organization shape requirements; technical environment and architect experience influence the architect; the architect produces architecture; architecture shapes the system. Reverse: experience from the resulting system and environment feeds back to the architect and future requirements/decisions.</div><div class="source">Source: Assignment 2 Q6 + Module 2 slide 34</div></div>
+    </div>
+</div></section>
+
+<section id="plan"><div class="wrap">
+<div class="section-head"><div><div class="eyebrow">05 · Fast Study Plan</div><h2>A high-yield review sequence</h2></div><p>Prioritize connections between requirements, quality attributes, design decisions, and pattern tradeoffs.</p></div>
+<div class="exam-grid">
+<div class="exam-card"><h4>1. Foundations</h4><p>Architecture definition → structures/views → abstraction → broad/shallow vs. narrow/deep → programming in the large.</p></div>
+<div class="exam-card"><h4>2. Drivers</h4><p>ASRs → stakeholders → QAW → business goals → utility trees → quality-attribute scenarios.</p></div>
+<div class="exam-card"><h4>3. Decisions</h4><p>Why architecture matters → local/nonlocal/architectural change → seven decision categories → ADD.</p></div>
+<div class="exam-card"><h4>4. Patterns</h4><p>Learn each pattern as: context/problem/solution + components/connectors/constraints + strengths/weaknesses.</p></div>
+<div class="exam-card"><h4>5. Tradeoffs</h4><p>Use KWIC and robotics to practice answering “why this pattern for these quality goals?” rather than memorizing one universally best style.</p></div>
+<div class="exam-card"><h4>6. Written responses</h4><p>Practice a 4-part answer: define → explain mechanism → give example → name tradeoff/limitation.</p></div>
+</div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+Built specifically from the uploaded SE 4352 course materials: Modules 1–5, Module 5 case studies, Assignment 1, and Assignment 2. Source labels on each study card point back to the relevant slide ranges.
+</div></footer>
+<script>
+const cards = [["What is software architecture?", "Structures/elements, their relationships, properties, and governing design decisions."], ["Why is architecture considered early?", "Its decisions are among the earliest, hardest to change, and critical to quality attributes."], ["What do formal architecture definitions emphasize?", "Components/elements, relationships, externally visible properties, constraints, and evolution."], ["What are architectural structural elements?", "Major software/system parts and the interfaces through which the system is composed."], ["What does architecture say about behavior?", "It captures collaborations/interactions among elements, not just static structure."], ["What does architecture say about composition?", "It describes how structural and behavioral elements combine into larger subsystems."], ["What is an architectural style?", "A recurring organization of elements, connectors, and constraints that guides a system."], ["What can building architecture teach us?", "Major elements, composition, arrangement, need-driven design, and the architect\u2019s role."], ["Why is the building analogy limited?", "Software is less visible, less physically constrained, less mature, and more dynamic."], ["Why is software dynamic compared with buildings?", "Software behavior and structure can change during execution and evolution."], ["What is Waterfall development?", "A mostly sequential progression through development phases, best suited to stable requirements."], ["What is iterative development?", "Repeated increments that allow learning, evaluation, and refinement during construction."], ["What does Agile emphasize?", "Adaptability, people, short iterations, feedback, and responding to changing requirements."], ["What distinguishes Spiral development?", "Iteration combined with explicit risk analysis and repeated planning/evaluation."], ["Why can Waterfall struggle with evolving requirements?", "Late changes can be expensive because earlier phases are treated as largely complete."], ["Why might Spiral fit safety-critical evolving systems?", "It supports iteration while making risk analysis a central activity."], ["Why is architecture 'broad and shallow'?", "It spans the whole system at a high abstraction level."], ["Why is detailed design 'narrow and deep'?", "It focuses deeply on a smaller part of the system and its implementation."], ["Are architecture and design identical?", "No. Architecture is design, but not every detailed design decision is architectural."], ["What kinds of concerns are often architectural?", "System organization, interfaces, communication, distribution, quality attributes, and constraints."], ["Module 2 definition of software architecture?", "The set of structures needed to reason about a system: elements, relations, and their properties."], ["What is a software structure?", "A set of elements held together by a relation."], ["What is a view?", "A stakeholder-readable representation of one or more architectural structures."], ["Structure vs. view?", "The structure exists in the system; the view documents or represents that structure."], ["What do architects design and document?", "They design structures and document views of those structures."], ["Why is architecture an abstraction?", "It suppresses internal details that do not matter for system-level reasoning."], ["Which element details are usually non-architectural?", "Private internal implementation details with no effects outside that element."], ["When is a structure architectural?", "When it supports reasoning about a system property important to a stakeholder."], ["What can a module structure help analyze?", "How easily the system can be extended or contracted."], ["What can a concurrency structure help analyze?", "Parallelism, deadlock risk, and performance bottlenecks."], ["What can a deployment structure help analyze?", "Performance, availability, and security goals."], ["Programming in the small?", "Relatively simple standalone programming with limited coordination."], ["Programming in the large?", "Large systems with many people/components, dependencies, interfaces, and coordination needs."], ["Where is architecture most useful: large or small?", "Programming in the large."], ["What are common architect responsibilities?", "Stakeholder liaison, technology knowledge, software engineering, and risk management."], ["What does the AIC model show?", "Contextual influences on the architect and feedback from architecture/system experience."], ["What influences the architect in AIC?", "Stakeholders, requirements, development organization, technical environment, and experience."], ["What is the forward AIC flow?", "Context/requirements influence architect \u2192 architecture \u2192 system."], ["What is the reverse AIC influence?", "System outcomes and experience feed back into later architectural thinking."], ["What is an ASR?", "An architecturally significant requirement with a profound effect on the architecture."], ["Why aren't all requirements equal to an architect?", "Only some substantially change architectural structures or decisions."], ["Where can candidate ASRs be found?", "Requirements documents, user stories, stakeholders, business goals, and QAWs."], ["Why may requirements documents miss ASRs?", "They often emphasize functionality and capture quality attributes poorly."], ["Why can't architects wait for requirements to be 'finished'?", "Architecture often must begin while requirements are still changing."], ["Why interview stakeholders for ASRs?", "Interviews reveal needs, architectural drivers, and useful quality-attribute scenarios."], ["What should stakeholder interviews produce?", "Architectural drivers and a stakeholder-prioritized set of QA scenarios."], ["What is a QAW?", "A facilitated stakeholder method to generate, prioritize, and refine QA scenarios."], ["QAW Step 1?", "Presentation and introductions: explain the workshop motivation and method."], ["QAW Step 2?", "Business/mission presentation: context, functions, constraints, and known QA requirements."], ["QAW Step 3?", "Architectural plan presentation: share current architectural thinking."], ["QAW Step 4?", "Identify architectural drivers and reach stakeholder consensus on them."], ["QAW Step 5?", "Scenario brainstorming: stakeholders propose scenarios with stimulus and response."], ["QAW Step 6?", "Scenario consolidation: combine similar scenarios to avoid split voting."], ["QAW Step 7?", "Scenario prioritization through stakeholder voting."], ["QAW Step 8?", "Refine top scenarios into the six-part quality-attribute scenario form."], ["What are the six parts of a QA scenario?", "Source, stimulus, artifact, environment, response, response measure."], ["How can business goals relate to architecture?", "Via QA requirements, direct architectural influence, or no architectural influence."], ["Why do business goals matter to architects?", "They frequently lead directly to ASRs."], ["What two traits should an ASR have?", "Profound architectural impact and high business/mission value."], ["What is a utility tree?", "A top-down structure for capturing, refining, and prioritizing ASRs/QA scenarios."], ["What is the root of a utility tree?", "A placeholder node called Utility."], ["What is the second utility-tree level?", "Broad quality-attribute categories."], ["What are utility-tree leaves?", "Specific quality-attribute scenarios."], ["How are utility-tree scenarios prioritized?", "By business/mission importance and architectural difficulty/impact."], ["Most important course message about quality attributes?", "Architecture substantially determines whether required quality attributes can be achieved."], ["How does architecture support performance?", "Manage time behavior, shared resources, and communication frequency/volume."], ["How does architecture support modifiability?", "Allocate responsibilities so common changes affect few elements."], ["How does architecture support security?", "Protect communication and control which elements can access information."], ["How does architecture support scalability?", "Localize resources and avoid hard-coded capacity assumptions."], ["How does architecture support reusability?", "Restrict coupling so elements can be extracted with few dependencies."], ["What is a local change?", "A change made by modifying a single element."], ["What is a nonlocal change?", "A multi-element change that keeps the underlying architecture intact."], ["What is an architectural change?", "A change to fundamental element interactions/approach that can affect the whole system."], ["Which changes should a good architecture make common?", "Local changes."], ["Why analyze architecture early?", "Early quality problems are cheaper and less disruptive to fix."], ["How does architecture improve stakeholder communication?", "It provides a common language for expressing and negotiating concerns."], ["Why is architecture a constraint on implementation?", "It limits later design choices to structures and rules consistent with the architecture."], ["How can architecture affect organization?", "Architecture can shape team structure, and organization can also shape architecture."], ["How does architecture help cost and schedule reasoning?", "It exposes major structures/decisions that drive implementation and planning effort."], ["Why is architecture reusable?", "Requirements, decisions, experience, and infrastructure can transfer across similar systems."], ["How does architecture reduce complexity?", "It restricts design alternatives and channels developer choices."], ["Seven design-decision categories?", "Responsibilities, coordination, data, resources, mapping, binding time, technology."], ["What is allocation of responsibilities?", "Assigning system functions, infrastructure, and QA responsibilities to architectural elements."], ["What is a coordination-model decision?", "Choosing who coordinates, how, and with what communication properties."], ["Examples of coordination properties?", "Stateful/stateless, sync/async, guaranteed/non-guaranteed, throughput, and latency."], ["What is a data-model decision?", "Choosing major data abstractions, operations, lifecycle, metadata, and organization."], ["What is a resource-management decision?", "Choosing resources, limits, managers, sharing/arbitration, and saturation behavior."], ["What are architectural mappings?", "Assignments among modules, runtime elements, processors, data stores, and delivery units."], ["What is binding time?", "The point when a design choice becomes fixed, such as build time or runtime."], ["What is involved in technology choice?", "Availability, tools, familiarity/support, side effects, and compatibility."], ["What is Attribute-Driven Design (ADD)?", "A systematic method that turns architectural drivers into structures."], ["What are architectural drivers in ADD?", "ASRs plus functionality, constraints, architectural concerns, and design purpose."], ["What does an architectural pattern relate?", "A recurring context and problem to an abstract, successful architectural solution."], ["What defines a pattern solution?", "Element types, connectors, topology, and semantic constraints."], ["Why are pattern choices tradeoffs?", "Each style improves some qualities while imposing costs or weaknesses elsewhere."], ["Main program/subroutine components?", "A main program and subroutines."], ["Main program/subroutine connectors?", "Function or procedure calls."], ["Main program/subroutine key constraint?", "No shared memory such as global variables in the slide's formulation."], ["What is the layered pattern?", "Cohesive module groups with a unidirectional allowed-to-use relation."], ["Layered pattern allocation rule?", "Every piece of software belongs to exactly one layer."], ["Layered pattern direction rule?", "Allowed-to-use relations should not be circular; lower layers cannot use higher layers."], ["What is strict layering?", "A layer may use only the layer immediately below it."], ["Layering advantages?", "Abstraction, encapsulation, replaceability, reasoning, and controlled dependencies."], ["Layering weaknesses?", "Up-front complexity/cost and a possible performance penalty."], ["What is client-server?", "Clients initiate service requests; servers provide services through request/reply interactions."], ["Client-server strengths?", "Centralized services, reuse, controlled access, and possible distributed scaling."], ["Client-server weaknesses?", "Server bottlenecks/single failure points and costly responsibility changes."], ["What is pipe-and-filter?", "Independent filters transform linear data streams passed through pipes."], ["Pipe-and-filter components?", "Independent programs called filters."], ["Pipe-and-filter connectors?", "Explicit routers/pipes carrying data streams."], ["Pipe-and-filter constraints?", "Linear streams, filter independence, and little/no direct inter-filter interaction."], ["Pipe-and-filter strengths?", "Composability, reuse, independent execution, and easy transformation changes."], ["Pipe-and-filter weaknesses?", "Poor fit for complex shared data or interaction; overhead may hurt performance."], ["What is peer-to-peer?", "Equal distributed peers directly request/provide services through a common protocol."], ["P2P availability principle?", "No single peer or peer group should be critical to system health."], ["P2P strengths?", "High availability, scalability, distribution, robustness, and resource sharing."], ["P2P weaknesses?", "Security, consistency, recovery, availability management, and latency can be difficult."], ["What is publish-subscribe?", "Publishers announce events; subscribers register interest; infrastructure delivers matches."], ["Publish-subscribe's main decoupling benefit?", "Producers need not know consumer identities or even their existence."], ["Publish-subscribe weaknesses?", "Latency, unpredictable order/timing, and delivery may need extra guarantees."], ["What is shared-data/blackboard architecture?", "Independent components communicate indirectly through a central shared repository."], ["Blackboard strengths?", "Supports coordination, shared knowledge, and evolving/heuristic problem solving."], ["Blackboard weaknesses?", "Repository bottleneck/failure risk and coupling to shared data representation."], ["What does KWIC stand for?", "Key Word In Context."], ["What does KWIC do?", "Circularly shifts lines, alphabetizes shifted lines, and outputs the result."], ["Five KWIC evaluation criteria?", "Algorithm change, data-representation change, functional enhancement, performance, reuse."], ["KWIC shared-data tradeoff?", "Efficient/intuitive, but storage-format and algorithm changes can affect many modules."], ["KWIC ADT tradeoff?", "Better encapsulation/reuse and change isolation, but some enhancements remain harder."], ["KWIC implicit-invocation tradeoff?", "Flexible/extensible, but control and performance are less predictable."], ["KWIC pipe-and-filter tradeoff?", "Strong reuse/composability, but interaction and performance can be weaker."], ["Why compare multiple architectures for the same case?", "To expose quality-attribute tradeoffs instead of assuming one universally best style."], ["Mobile robotics control-loop strength?", "Simple, direct, and suitable for small reactive control."], ["Mobile robotics layered strength?", "Separates responsibilities and levels of abstraction."], ["Mobile robotics implicit-invocation strength?", "Supports complex coordination, fault tolerance, and incremental replacement."], ["Mobile robotics blackboard strength?", "Coordinates multiple knowledge sources through shared evolving state."]];
+const quiz = [{"q": "Which description best matches software architecture?", "choices": ["Only the algorithms inside individual methods", "The significant organization, elements, relations, and constraints of a system", "Only the user interface layout", "A list of test cases"], "a": 1, "why": "The course definitions emphasize system elements/components, their relationships, externally visible properties, and governing constraints/decisions."}, {"q": "Why are early architectural decisions especially important?", "choices": ["They are easy to reverse after deployment", "They are often hard to change and strongly affect quality attributes", "They concern only code formatting", "They eliminate the need for requirements"], "a": 1, "why": "Module 1 emphasizes that architectural decisions are among the earliest and hardest to change, and they address system qualities."}, {"q": "Which is a limitation of the building-architecture analogy?", "choices": ["Buildings have no structure", "Software is dynamic and is not constrained by the same physical limitations", "Software has no stakeholders", "Buildings have no architects"], "a": 1, "why": "The slides explicitly note software's dynamic nature and different physical constraints."}, {"q": "Which development model explicitly emphasizes repeated risk analysis?", "choices": ["Waterfall", "Spiral", "A single-pass prototype", "Main program/subroutine"], "a": 1, "why": "Spiral combines iteration with explicit risk analysis."}, {"q": "Which statement best captures architecture versus detailed design?", "choices": ["Architecture is broad/shallow; detailed design is narrow/deep", "Architecture is narrow/deep; design is broad/shallow", "Architecture and design are unrelated", "Architecture contains only functional requirements"], "a": 0, "why": "This is the distinction stated in the course and Assignment 1."}, {"q": "Which development approach is most associated with short iterations and adapting to change?", "choices": ["Agile", "Waterfall", "Blackboard", "Layered"], "a": 0, "why": "Agile emphasizes adaptability, people, frequent feedback, and short iterations."}, {"q": "A software structure is best described as:", "choices": ["A source-code comment", "A set of elements held together by a relation", "A project's salary plan", "A single class method"], "a": 1, "why": "Module 2 defines a structure as a set of elements held together by a relation."}, {"q": "What is a view?", "choices": ["The structure itself as it exists in the running system", "A representation of one or more architectural structures", "Only a deployment machine", "A list of bugs"], "a": 1, "why": "The slides say a view is a stakeholder-readable representation of a coherent set of architectural elements/structures."}, {"q": "Why does architecture omit private implementation details?", "choices": ["To make code impossible to debug", "Because details with no external ramifications are not useful for architectural reasoning", "Because private details are always secret", "Because architecture excludes software elements"], "a": 1, "why": "Architecture is an abstraction that selects details useful for system-level reasoning and suppresses irrelevant internal details."}, {"q": "Which structure is strongly tied to reasoning about deadlock and performance bottlenecks?", "choices": ["Concurrency structure", "Salary structure", "Color palette", "Requirements document"], "a": 0, "why": "The concurrency structure represents system parallelism and helps analyze deadlock and performance bottlenecks."}, {"q": "Software architecture is most useful for:", "choices": ["Programming in the large", "Choosing local variable names", "Programming in the small only", "Formatting comments"], "a": 0, "why": "Architecture is most valuable where many people/components must coordinate."}, {"q": "In AIC, which item is an influence on the architect?", "choices": ["Stakeholders", "Only the final executable", "Only unit-test names", "Only source indentation"], "a": 0, "why": "AIC includes stakeholders, requirements, the development organization, technical environment, and architect experience."}, {"q": "In AIC, the forward flow after the architect is:", "choices": ["Architecture then system", "System then requirements", "Test cases then salary", "Deployment then stakeholders only"], "a": 0, "why": "The diagram shows the architect producing architecture, which shapes the system."}, {"q": "What makes a requirement an ASR?", "choices": ["It appears first in a document", "It has a profound effect on the architecture", "It is written by a developer", "It concerns only UI color"], "a": 1, "why": "An ASR is architecturally significant because satisfying it can materially change the architecture."}, {"q": "Why are requirements documents not enough to find all ASRs?", "choices": ["They never contain functions", "They often emphasize functionality and capture quality attributes poorly", "They contain only diagrams", "Architects are forbidden to read them"], "a": 1, "why": "Module 3 says requirements documents often underrepresent quality attributes and other architecturally useful information."}, {"q": "What is the purpose of a QAW?", "choices": ["Refactor source code", "Generate, prioritize, and refine quality-attribute scenarios", "Choose developer salaries", "Measure code coverage"], "a": 1, "why": "QAW is a stakeholder-focused method for eliciting and prioritizing QA scenarios before architecture is complete."}, {"q": "Which QAW step asks stakeholders to propose scenarios?", "choices": ["Scenario brainstorming", "Architectural plan presentation", "Introductions", "Scenario consolidation"], "a": 0, "why": "Step 5 is Scenario Brainstorming."}, {"q": "Why does QAW consolidate similar scenarios?", "choices": ["To remove all quality requirements", "To avoid splitting votes across scenarios expressing the same concern", "To choose a programming language", "To eliminate stakeholder input"], "a": 1, "why": "The slides say consolidation prevents votes from being spread across several scenarios that express the same concern."}, {"q": "What happens in QAW scenario prioritization?", "choices": ["Stakeholders vote on scenarios", "Developers delete scenarios", "The architecture is implemented", "Only the architect votes"], "a": 0, "why": "Step 7 prioritizes scenarios using stakeholder votes."}, {"q": "Which is NOT part of the six-part quality-attribute scenario form?", "choices": ["Source", "Stimulus", "Artifact", "Class inheritance tree"], "a": 3, "why": "The six parts are source, stimulus, artifact, environment, response, and response measure."}, {"q": "What is the root node of a utility tree called?", "choices": ["Utility", "Architecture", "Component", "Risk"], "a": 0, "why": "The utility tree uses a placeholder root named Utility."}, {"q": "What appears at the leaves of a utility tree?", "choices": ["Specific quality-attribute scenarios", "Programming languages", "Stakeholder salaries", "Source files"], "a": 0, "why": "Scenarios are the leaves and represent specific QA requirements."}, {"q": "How can a business goal influence architecture?", "choices": ["Only through user-interface color", "Through QA requirements, direct influence, or sometimes not at all", "Only after deployment", "It can never affect architecture"], "a": 1, "why": "Module 3 gives exactly these three possible relationships."}, {"q": "Which statement is the course's central message about quality attributes?", "choices": ["Architecture substantially determines whether required qualities can be achieved", "Quality attributes are decided only during testing", "Architecture has no effect on performance", "All quality attributes are implementation details"], "a": 0, "why": "Module 4 explicitly identifies this as the most important course message."}, {"q": "A change that modifies only one architectural element is:", "choices": ["Local", "Nonlocal", "Architectural", "Impossible"], "a": 0, "why": "A local change affects a single element."}, {"q": "A change requiring several elements but preserving the architectural approach is:", "choices": ["Local", "Nonlocal", "Architectural", "No change"], "a": 1, "why": "That is the definition of a nonlocal change."}, {"q": "Which change type alters fundamental element interactions?", "choices": ["Local", "Nonlocal", "Architectural", "Cosmetic"], "a": 2, "why": "Architectural changes affect the fundamental interaction approach and can ripple throughout the system."}, {"q": "Which architectural tactic best supports modifiability?", "choices": ["Assign responsibilities so common changes touch few elements", "Maximize coupling between every element", "Hard-code every resource limit", "Centralize all unrelated functionality"], "a": 0, "why": "Module 4 says responsibility allocation should localize likely changes."}, {"q": "Which architectural concern is most directly tied to protecting inter-element communication and access?", "choices": ["Security", "Color selection", "Syntax highlighting", "Naming style"], "a": 0, "why": "The security discussion focuses on protecting communication and controlling access to information."}, {"q": "Which is one of the seven architecture design-decision categories?", "choices": ["Coordination model", "Variable naming", "Comment indentation", "Font selection"], "a": 0, "why": "Coordination model is one of the seven categories."}, {"q": "Which question belongs to a coordination-model decision?", "choices": ["Should communication be synchronous or asynchronous?", "What should a local variable be named?", "What color should a button be?", "How many comments per method?"], "a": 0, "why": "Coordination decisions include communication mechanisms and properties such as synchronous/asynchronous."}, {"q": "What does binding time describe?", "choices": ["When a design choice becomes fixed", "How fast a database query runs", "How many users exist", "Who wrote a requirement"], "a": 0, "why": "Binding time concerns when decisions are bound, such as build time or runtime."}, {"q": "What does ADD turn architectural drivers into?", "choices": ["Structures", "Only test cases", "Only user stories", "Salary estimates"], "a": 0, "why": "Module 4 states that architectural design turns drivers into structures, and ADD systematizes that process."}, {"q": "Which is an architectural driver in ADD?", "choices": ["ASRs", "Only UI font sizes", "Only local variable names", "Only code comments"], "a": 0, "why": "ADD architectural drivers include ASRs, functionality, constraints, architectural concerns, and design purpose."}, {"q": "Why can documented architecture help stakeholder communication?", "choices": ["It provides a common language for concerns and tradeoffs", "It removes all disagreements automatically", "It replaces stakeholder involvement", "It eliminates requirements"], "a": 0, "why": "The slides describe architecture as a shared basis for expressing, negotiating, and resolving concerns."}, {"q": "An architectural pattern connects:", "choices": ["A recurring context/problem to an abstract solution", "A variable to a constant", "A test to a bug only", "A developer to a salary"], "a": 0, "why": "Pattern descriptions are organized around context, problem, and solution."}, {"q": "Which is part of an architectural pattern solution?", "choices": ["Element types and connectors", "Only employee names", "Only project deadlines", "Only source comments"], "a": 0, "why": "Pattern solutions specify element types, connectors, topology, and semantic constraints."}, {"q": "Which pattern uses a unidirectional allowed-to-use relation?", "choices": ["Layered", "Peer-to-peer", "Publish-subscribe", "Blackboard"], "a": 0, "why": "The layered pattern is defined by layers and allowed-to-use relationships."}, {"q": "Under strict layering, layer N should normally use:", "choices": ["Only layer N-1", "Any lower layer", "Any higher layer", "Every layer"], "a": 0, "why": "Strict layering permits use only of the immediately lower layer."}, {"q": "Which is a weakness of layering?", "choices": ["Added complexity and possible performance penalty", "No abstraction at all", "No modules can be separated", "It requires peer equality"], "a": 0, "why": "The slides list up-front complexity/cost and performance penalty as weaknesses."}, {"q": "Which pattern has an inherent client/server role asymmetry?", "choices": ["Client-server", "Peer-to-peer", "Publish-subscribe", "Pipe-and-filter"], "a": 0, "why": "Clients request and servers provide services; P2P explicitly avoids that asymmetry."}, {"q": "A common client-server weakness is:", "choices": ["Server bottleneck or single point of failure", "No request/reply interaction", "No centralized services", "Peers are always equal"], "a": 0, "why": "A central server can become a bottleneck or failure point."}, {"q": "Which pattern transforms linear data streams through independent programs?", "choices": ["Pipe-and-filter", "Client-server", "Blackboard", "Layered"], "a": 0, "why": "Pipe-and-filter uses independent filters and stream connectors."}, {"q": "Why is pipe-and-filter highly composable?", "choices": ["Filters are independent with simple stream interfaces", "All filters share one global object", "Every filter must know all others", "It forbids reuse"], "a": 0, "why": "Independent filters with simple input/output stream contracts can be recombined."}, {"q": "Which statement best describes peer-to-peer?", "choices": ["Peers are equal and directly interact through a common protocol", "One fixed server controls all clients", "Components communicate only through a shared database", "Data moves only through linear pipes"], "a": 0, "why": "P2P components directly interact as peers and no peer/group should be critical."}, {"q": "Which pattern decouples producers from consumer identities using events?", "choices": ["Publish-subscribe", "Main program/subroutine", "Client-server", "Layered"], "a": 0, "why": "Publishers announce events while subscribers register interest; they need not know each other."}, {"q": "Which is a weakness of publish-subscribe?", "choices": ["Delivery timing/order can be unpredictable", "Publishers must know every subscriber", "It cannot support one-to-many dissemination", "It requires one central function call stack"], "a": 0, "why": "The pattern can introduce latency and less predictable timing/order, and guarantees may require extra mechanisms."}, {"q": "Which pattern centers communication on a shared repository?", "choices": ["Shared-data/blackboard", "Peer-to-peer", "Pipe-and-filter", "Main/subroutine"], "a": 0, "why": "Shared-data/blackboard architectures communicate indirectly through a central store."}, {"q": "A common shared-data weakness is:", "choices": ["Repository bottleneck/single point of failure", "No common data at all", "No possibility of reuse", "No central representation"], "a": 0, "why": "The repository can bottleneck performance or become a critical failure point."}, {"q": "What are the five KWIC evaluation criteria?", "choices": ["Algorithm change, data change, functional enhancement, performance, reuse", "Security, salary, color, syntax, testing", "Only performance and reuse", "Only algorithm and data change"], "a": 0, "why": "The case-study slides evaluate each KWIC architecture using those five criteria."}, {"q": "Why does the KWIC case study compare several architectures for the same function?", "choices": ["To reveal architecture tradeoffs across qualities", "To prove there is one universal best style", "To avoid discussing change", "To compare programming languages only"], "a": 0, "why": "The point is to show that architectural choices trade off changeability, performance, reuse, and enhancement."}, {"q": "Which KWIC solution tends to couple modules around shared data representation?", "choices": ["Shared-data solution", "Pipe-and-filter only", "Peer-to-peer", "Strict layering"], "a": 0, "why": "In the shared-data solution, storage-format changes can affect many modules."}, {"q": "Which architecture is especially associated with reusable, recombinable transformations in KWIC?", "choices": ["Pipe-and-filter", "Shared data", "Client-server", "Peer-to-peer"], "a": 0, "why": "Pipe-and-filter supports composing independent transformations through simple streams."}, {"q": "In mobile robotics, why might a simple control loop be attractive?", "choices": ["It is direct and suitable for small reactive control", "It maximizes shared-repository reasoning", "It requires event buses", "It guarantees all complex task decomposition"], "a": 0, "why": "The case study presents control loops as simple and appropriate for smaller reactive robot control."}, {"q": "Which mobile-robotics approach helps coordinate independent knowledge sources via shared state?", "choices": ["Blackboard", "Main program only", "Strict client-server", "Waterfall"], "a": 0, "why": "Blackboard architecture coordinates knowledge sources around a shared repository."}, {"q": "Which lesson best summarizes the case studies?", "choices": ["Architecture selection depends on required qualities and tradeoffs", "One pattern is always best", "Performance is the only concern", "Patterns eliminate architectural decisions"], "a": 0, "why": "KWIC and robotics show that the appropriate architecture depends on the qualities and changes a system must support."}];
+let cardIndex=0, quizIndex=0, activeQuizSection=0;
+const quizState = quiz.map(()=>({attempts:0, correct:false, selected:null}));
+
+const quizSections = [
+  {name:'Module 1 · Foundations', short:'Module 1', start:0, end:5},
+  {name:'Module 2 · Structures & AIC', short:'Module 2', start:6, end:12},
+  {name:'Module 3 · ASRs & QAW', short:'Module 3', start:13, end:22},
+  {name:'Module 4 · Quality & ADD', short:'Module 4', start:23, end:34},
+  {name:'Module 5 · Patterns', short:'Module 5', start:35, end:48},
+  {name:'Case Studies · KWIC & Robotics', short:'Case Studies', start:49, end:55}
+];
+const lastQuestionBySection = quizSections.map(s=>s.start);
+
+function renderFlash(){
+  const c=cards[cardIndex];
+  document.querySelector('#flashFront').textContent=c[0];
+  document.querySelector('#flashBack').textContent=c[1];
+  document.querySelector('#flashCount').textContent=`${cardIndex+1} / ${cards.length}`;
+  document.querySelector('#flashProgress').style.width=((cardIndex+1)/cards.length*100)+'%';
+  document.querySelector('#flashcard').classList.remove('flipped');
+}
+function nextCard(d=1){cardIndex=(cardIndex+d+cards.length)%cards.length;renderFlash()}
+function shuffleCards(){
+  for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]]}
+  cardIndex=0;renderFlash();
+}
+
+function sectionForQuestion(index){
+  return quizSections.findIndex(s=>index>=s.start && index<=s.end);
+}
+
+function renderQuizTabs(){
+  const tabs=document.querySelector('#quizTabs');
+  tabs.innerHTML='';
+  quizSections.forEach((s,i)=>{
+    const mastered=quizState.slice(s.start,s.end+1).filter(x=>x.correct).length;
+    const total=s.end-s.start+1;
+    const b=document.createElement('button');
+    b.className='quiz-tab'+(i===activeQuizSection?' active':'');
+    b.textContent=`${s.short} · ${mastered}/${total}`;
+    b.onclick=()=>selectQuizSection(i);
+    tabs.appendChild(b);
+  });
+}
+
+function renderQuizSidebar(){
+  const s=quizSections[activeQuizSection];
+  document.querySelector('#quizSidebarTitle').textContent=s.name;
+  const box=document.querySelector('#quizSidebar');
+  box.innerHTML='';
+
+  for(let i=s.start;i<=s.end;i++){
+    const q=quiz[i], state=quizState[i];
+    const btn=document.createElement('button');
+    btn.className='quiz-nav-item'+(i===quizIndex?' active':'')+(state.correct?' mastered':'');
+    const localNum=i-s.start+1;
+    btn.innerHTML=`<span class="quiz-nav-num">${localNum}</span><span class="quiz-nav-text"></span><span class="quiz-nav-state">${state.correct?'✓':state.attempts?state.attempts+'×':''}</span>`;
+    btn.querySelector('.quiz-nav-text').textContent=q.q;
+    btn.onclick=()=>selectQuizQuestion(i);
+    box.appendChild(btn);
+  }
+}
+
+function selectQuizSection(sectionIndex){
+  lastQuestionBySection[activeQuizSection]=quizIndex;
+  activeQuizSection=sectionIndex;
+  quizIndex=lastQuestionBySection[sectionIndex];
+  const s=quizSections[sectionIndex];
+  if(quizIndex<s.start || quizIndex>s.end) quizIndex=s.start;
+  renderQuiz();
+}
+
+function selectQuizQuestion(index){
+  quizIndex=index;
+  activeQuizSection=sectionForQuestion(index);
+  lastQuestionBySection[activeQuizSection]=index;
+  renderQuiz();
+}
+
+function renderQuiz(){
+  const q=quiz[quizIndex];
+  const state=quizState[quizIndex];
+  const section=quizSections[activeQuizSection];
+  const localNum=quizIndex-section.start+1;
+  const totalInSection=section.end-section.start+1;
+
+  renderQuizTabs();
+  renderQuizSidebar();
+
+  document.querySelector('#quizNum').textContent=`${section.short} · Question ${localNum} of ${totalInSection}`;
+  document.querySelector('#quizStatus').textContent=state.correct
+    ? `Mastered · ${state.attempts} attempt${state.attempts===1?'':'s'}`
+    : state.attempts
+      ? `${state.attempts} attempt${state.attempts===1?'':'s'}`
+      : 'Not attempted';
+
+  document.querySelector('#quizQ').textContent=q.q;
+  const box=document.querySelector('#choices');
+  box.innerHTML='';
+
+  q.choices.forEach((c,i)=>{
+    const b=document.createElement('button');
+    b.className='choice';
+    b.textContent=c;
+    if(state.correct && i===q.a) b.classList.add('correct');
+    b.onclick=()=>answerQuiz(i,b);
+    box.appendChild(b);
+  });
+
+  const e=document.querySelector('#explain');
+  if(state.correct){
+    e.textContent='Correct. '+q.why;
+    e.style.display='block';
+  } else {
+    e.textContent='';
+    e.style.display='none';
+  }
+
+  document.querySelector('#prevQuiz').disabled=quizIndex===section.start;
+  document.querySelector('#nextQuiz').disabled=quizIndex===section.end;
+
+  const mastered=quizState.slice(section.start,section.end+1).filter(x=>x.correct).length;
+  document.querySelector('#quizProgress').style.width=(mastered/totalInSection*100)+'%';
+  document.querySelector('#quizSectionProgress').textContent=`Section progress: ${mastered} of ${totalInSection} mastered`;
+}
+
+function answerQuiz(i,b){
+  const q=quiz[quizIndex];
+  const state=quizState[quizIndex];
+  if(state.correct) return;
+
+  state.attempts++;
+  state.selected=i;
+
+  const btns=[...document.querySelectorAll('.choice')];
+  btns.forEach(x=>x.classList.remove('wrong'));
+  const e=document.querySelector('#explain');
+
+  if(i===q.a){
+    state.correct=true;
+    b.classList.add('correct');
+    e.textContent='Correct. '+q.why;
+    e.style.display='block';
+  } else {
+    b.classList.add('wrong');
+    e.textContent='Not quite — try again. You can keep attempting this question until you get it right.';
+    e.style.display='block';
+  }
+
+  renderQuizTabs();
+  renderQuizSidebar();
+
+  const section=quizSections[activeQuizSection];
+  const total=section.end-section.start+1;
+  const mastered=quizState.slice(section.start,section.end+1).filter(x=>x.correct).length;
+  document.querySelector('#quizProgress').style.width=(mastered/total*100)+'%';
+  document.querySelector('#quizSectionProgress').textContent=`Section progress: ${mastered} of ${total} mastered`;
+
+  document.querySelector('#quizStatus').textContent=state.correct
+    ? `Mastered · ${state.attempts} attempt${state.attempts===1?'':'s'}`
+    : `${state.attempts} attempt${state.attempts===1?'':'s'}`;
+}
+
+function moveQuiz(d){
+  const section=quizSections[activeQuizSection];
+  const next=quizIndex+d;
+  if(next<section.start || next>section.end) return;
+  quizIndex=next;
+  lastQuestionBySection[activeQuizSection]=quizIndex;
+  renderQuiz();
+}
+
+function resetCurrentQuiz(){
+  quizState[quizIndex]={attempts:0,correct:false,selected:null};
+  renderQuiz();
+}
+
+function filterTopics(){
+  const term=document.querySelector('#topicSearch').value.toLowerCase();
+  const active=document.querySelector('.chip.active').dataset.filter;
+  document.querySelectorAll('.topic').forEach(el=>{
+    const okModule=active==='All'||el.dataset.module===active;
+    const okTerm=!term||el.textContent.toLowerCase().includes(term);
+    el.classList.toggle('hidden',!(okModule&&okTerm));
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  renderFlash();renderQuiz();
+  document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');filterTopics();
+  });
+  document.querySelector('#topicSearch').addEventListener('input',filterTopics);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight')nextCard(1); if(e.key==='ArrowLeft')nextCard(-1);
+    if(e.key===' ' && document.activeElement.tagName!=='INPUT'){e.preventDefault();document.querySelector('#flashcard').classList.toggle('flipped')}
+  });
+});
+</script>
+</body></html>
